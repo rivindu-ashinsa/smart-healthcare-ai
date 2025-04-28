@@ -3,19 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <title>Health AI Predictor</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>Health AI Predictor</h1>
-    <form action="/predict" method="POST">
-        <input type="number" name="age" placeholder="Enter Age" required>
-        <input type="number" name="bp" placeholder="Enter Blood Pressure" required>
-        <input type="number" name="glucose" placeholder="Enter Glucose Level" required>
-        <button type="submit">Predict</button>
-    </form>
-
-    {% if prediction_text %}
-    <h2>{{ prediction_text }}</h2>
-    {% endif %}
+    <div class="container">
+        <h1>Health AI Predictor</h1>
+        <form action="/predict" method="POST">
+            <div class="form-content">
+                <div class="input-sec">
+                    <label for="age">Age:</label><br>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="input-sec">
+                    <label for="sex">Sex:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <label for="cp">Chest Pain Type:</label>
+                    <select id="cp" name="cp" required>
+                        <option value="0">Typical angina</option>
+                        <option value="1">Atypical angina</option>
+                        <option value="2">Non-anginal pain</option>
+                        <option value="3">Asymptomatic</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <label for="trestbps">Resting Blood Pressure (mm Hg):</label>
+                    <input type="number" id="trestbps" name="trestbps" required>
+                </div>
+                <div class="input-sec">
+                    <label for="chol">Serum Cholesterol Level (mg/dl):</label>
+                    <input type="number" id="chol" name="chol" required>
+                </div>
+                <div class="input-sec">
+                    <label for="fbs">Fasting Blood Sugar > 120 mg/dl:</label>
+                    <select id="fbs" name="fbs" required>
+                        <option value="1">True</option>
+                        <option value="0">False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-content">
+                <div class="input-sec">
+                    <label for="restecg">Resting Electrocardiographic Results:</label>
+                    <select id="restecg" name="restecg" required>
+                        <option value="0">Normal</option>
+                        <option value="1">ST-T wave abnormality</option>
+                        <option value="2">Left ventricular hypertrophy</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <label for="thalach">Maximum Heart Rate Achieved:</label>
+                    <input type="number" id="thalach" name="thalach" required>
+                </div>
+                <div class="input-sec">
+                    <label for="exang">Exercise Induced Angina:</label>
+                    <select id="exang" name="exang" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <label for="oldpeak">ST Depression Induced by Exercise:</label>
+                    <input type="number" step="0.1" id="oldpeak" name="oldpeak" required>
+                </div>
+                <div class="input-sec">
+                    <label for="slope">Slope of the Peak Exercise ST Segment:</label>
+                    <select id="slope" name="slope" required>
+                        <option value="0">Upsloping</option>
+                        <option value="1">Flat</option>
+                        <option value="2">Downsloping</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <label for="ca">Number of Major Vessels Colored by Fluoroscopy:</label>
+                    <input type="number" id="ca" name="ca" min="0" max="3" required>
+                </div>
+                <div class="input-sec">
+                    <label for="thal">Thalassemia Test Result:</label>
+                    <select id="thal" name="thal" required>
+                        <option value="1">Normal</option>
+                        <option value="2">Fixed defect</option>
+                        <option value="3">Reversible defect</option>
+                    </select>
+                </div>
+                <div class="input-sec">
+                    <button type="reset">Reset</button>
+                    <button type="submit">Predict</button>
+                </div>
+            </div>
+        </form>
+            </div>
+        </form>
+    
+        {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+        {% endif %}
+    </div>
+   
 </body>
 </html>
