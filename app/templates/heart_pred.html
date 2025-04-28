@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health AI Predictor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Health AI Predictor</h1>
+    <form action="/predict" method="POST">
+        <input type="number" name="age" placeholder="Enter Age" required>
+        <input type="number" name="bp" placeholder="Enter Blood Pressure" required>
+        <input type="number" name="glucose" placeholder="Enter Glucose Level" required>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_text %}
+    <h2>{{ prediction_text }}</h2>
+    {% endif %}
+</body>
+</html>
