@@ -10,7 +10,7 @@ model = pickle.load(open('models/model.pkl', 'rb'))
 def home():
     return render_template('heart_pred.html')
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predictHeart', methods=['POST'])
 def predict():
     if request.method == 'POST':
         try:
