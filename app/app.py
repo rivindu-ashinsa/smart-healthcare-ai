@@ -1,10 +1,20 @@
 from flask import Flask, render_template, request
+import pandas as pd
 import pickle
-import numpy as np
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+from src.encoders import CustomCategoricalEncoder, CustomStandardScaler
 
 app = Flask(__name__)
 
-# model = pickle.load(open('D:\jupyter\smart-healthcare-ai\models\heart-pred\model.pkl', 'rb'))
+# preprocessor and model
+with open('models/heart-pred/preprocessor.pkl', 'rb') as preprocessor_file:
+    preprocessor = pickle.load(preprocessor_file)
+
+print(type(preprocessor))
+with open('models/heart-pred/model.pkl', 'rb') as model_file:
+    model = pickle.load(model_file)
 
 @app.route('/')
 def home():
@@ -27,30 +37,38 @@ def predict():
             slope = int(request.form['slope'])
             ca = int(request.form['ca'])
             thal = int(request.form['thal'])
-            # ['age', 'sex', 'trestbps', 'chol', 'fbs', 'thalach', 'exang','oldpeak', 'ca', 'cp_0', 'cp_1', 'cp_2', 'cp_3', 'restecg_0','restecg_1', 'restecg_2', 'thal_1', 'thal_2', 'thal_3', 'slope_0','slope_1', 'slope_2']
-            # features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
-            # prediction = model.predict_proba(features)
 
+            pred_df = pd.DataFrame({
+                'age': age,
+                'sex': sex,
+                'cp': cp,
+                'trestbps': trestbps,
+                'chol': chol,
+                'fbs': fbs,
+                'restecg': restecg,
+                'thalach': thalach,
+                'exang': exang,
+                'oldpeak': oldpeak,
+                'slope': slope,
+                'ca': ca,
+                'thal': thal
+            }, index=[0])
 
-            # result = "High Risk" if prediction[0] == 1 else "Low Risk"
-            print("\n--- Form Submission Received ---")
-            print(f"Age: {type(age)}")
-            print(f"Sex: {type(sex)}")
-            print(f"Chest Pain Type: {type(cp)}")
-            print(f"Resting Blood Pressure: {type(trestbps)}")
-            print(f"Cholesterol: {type(chol)}")
-            print(f"Fasting Blood Sugar > 120mg/dl: {type(fbs)}")
-            print(f"Rest ECG Result: {type(restecg)}")
-            print(f"Maximum Heart Rate Achieved: {type(thalach)}")
-            print(f"Exercise Induced Angina: {type(exang)}")    
-            print(f"Oldpeak (ST depression): {type(oldpeak)}")
-            print(f"Slope of ST segment: {type(slope)}")
-            print(f"Number of major vessels (ca): {type(ca)}")
-            print(f"Thalassemia Test Result: {type(thal)}")
-            print("---------------------------------\n")
-            # return render_template('index.html', prediction_text=f'Prediction: {result}')
+            # Preprocess the input data
+            X_new = preprocessor.transform(pred_df)
+
+            # Make predictions
+            y_pred_new = model.predict(X_new)
+            y_pred_new_proba = model.predict_proba(X_new)
+
+            # Print the prediction and probability
+            print(f"Prediction: {y_pred_new[0]}")
+            print(f"Probability of No Disease: {y_pred_new_proba[0][0]:.2f}")
+
+            return render_template('heart_pred.html', prediction_text=f'Probability of No Disease: {y_pred_new_proba[0][0]:.2f}')
 
         except Exception as e:
+            print(e)
             return render_template('heart_pred.html', prediction_text=f'Error: {e}')
 
 if __name__ == "__main__":
