@@ -12,7 +12,6 @@ app = Flask(__name__)
 with open('models/heart-pred/preprocessor.pkl', 'rb') as preprocessor_file:
     preprocessor = pickle.load(preprocessor_file)
 
-print(type(preprocessor))
 with open('models/heart-pred/model.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
